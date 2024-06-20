@@ -1,7 +1,7 @@
 #include <iostream>
-#include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
+
 using namespace std;
 
 //#aa84bf #84bf88 #735648 #734857 #ad667f
@@ -10,86 +10,78 @@ using namespace std;
 
 int getnumber(const char *askfor);
 
-const int defaultpxmax = 15;
+const int defaultpxmax = 7;
 
 int main(int argc, char *argv[]){
     sf::Image imgtex;
     int width, height, pxmax = defaultpxmax, pixelcount = 0;
     sf::Color cols[4] = {sf::Color(170, 132, 191), sf::Color(132, 191, 136), sf::Color(115, 86, 72), sf::Color(115, 72, 87)};
     string imgToOpen = "ref.png";
+
+    //loops through all args
     for(int curarg = 1; curarg < argc; curarg++){
         if(string(argv[curarg]) == "--setcol"){
             curarg++;
-            // int colargindx = 0;
             if(argc-(curarg+4) < 0){
                 cout << "not enough args\n";
                 return 0;
             }
-
+            //loops though specifically the colour args
             for(int colargindx = curarg; colargindx < curarg+4; colargindx++){
                 cout << argv[colargindx] << endl;
-                // if() //add size checking, then split into 2's, then make 2's into color
+                if(string(argv[colargindx]).size() < 6){
+                    cout << "hex value not long enough\n";
+                    return -1;
+                }
+                int rgb[3];
+                for(int rgbindx = 0; rgbindx < 6; rgbindx+=2){
+                    // cout << "letters in colour arg: " << string(argv[colargindx]).substr(rgbindx, 2)<< endl;
+                    try{
+                        rgb[rgbindx/2] = stoi(string(argv[colargindx]).substr(rgbindx, 2), 0, 16);
+                        cout << "rgb val: " << rgb[rgbindx/2] << endl;
+                    }
+                    catch (invalid_argument){
+                        cout << "error in hex formatting. make sure there is no #\'s\n";
+                        return 0;
+                    }
+                }
+                cout << "adding to cols [" << colargindx-curarg << "]\n";
+                cols[colargindx-curarg] = sf::Color(rgb[0], rgb[1], rgb[2]);
+            }
+            curarg+=3;
+        }
+        else{
+            try{
+                cout << "stoi arg: " << argv[curarg] << endl;
+                pxmax = stoi(argv[curarg]);
+            }
+            catch(invalid_argument){
+                cout << "error, invalid argument\n";
             }
         }
-        // if(string(argv[i]) == "--setcol"){
-        //     int colpos = 0;
-        //     if(argc-(i+5) < 0){
-        //         cout << "not enough args";
-        //         return 0;
-        //     }
-        //     for(int coi = i+1; coi < 5+i; coi++){
-        //         int hpindx = 0;
-        //         if(argv[coi][0] == '#'){
-        //             cout << "\nhash detected\n";
-        //             hpindx=1;
-        //         }
-        //         char hexpair[2];
-        //         int rgbbuffer[3];
-        //         for(int rbgi = 0; rbgi<3; rbgi++){
-                    
-        //         }
-        //         //upto extracting pairs of hex and making it RGB's
-        //     }
-        // }
     }
     
-    return 0;
-
     if(!imgtex.loadFromFile(imgToOpen))
         return -1;
     width = imgtex.getSize().x;
     height = imgtex.getSize().y;
-    if(argc > 2){
-        try{
-            pxmax = stoi(argv[2]);
-        }
-        catch(invalid_argument){
-            cout << "invalid arguments, enter a number for 2nd paramter\n";
-            return -1;
-        }
-    }
-    for(int args = 1; args < argc; args++){
-        if(argv[args] == (char *)"--setcol"){
-            cout << "setcol!!\n";
-        }
-    }
-    pxmax = (width*height) * pxmax/100;
+    pxmax = (width*height) * (float)pxmax/100;
     srand(clock());
     sf::Color pxcolor;
     sf::Vector2 pxpos(0, 0);
     
     while (pixelcount < pxmax){
         if(pixelcount < pxmax/4){
-            pxcolor = sf::Color::Red;
+            pxcolor = cols[0];
         }
         else if(pixelcount < pxmax/2){
-            pxcolor = sf::Color::Green;
+            pxcolor = cols[1];
         }
         else if(pixelcount < (pxmax/4)*3){
-            pxcolor = sf::Color::Blue;
+            pxcolor = cols[2];
         }
         else{
-            pxcolor = sf::Color::Magenta;
+            pxcolor = cols[3];
         }
         int spawncorner = random()%4;
         switch (spawncorner){

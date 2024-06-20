@@ -17,23 +17,40 @@ int main(int argc, char *argv[]){
     int width, height, pxmax = defaultpxmax, pixelcount = 0;
     sf::Color cols[4] = {sf::Color(170, 132, 191), sf::Color(132, 191, 136), sf::Color(115, 86, 72), sf::Color(115, 72, 87)};
     string imgToOpen = "ref.png";
-    for(int i = 1; i < argc; i++){
-        if(string(argv[i]) == "--setcol"){
-            int colpos = 0;
-            if(argc-(i+5) < 0){
-                cout << "not enough args";
+    for(int curarg = 1; curarg < argc; curarg++){
+        if(string(argv[curarg]) == "--setcol"){
+            curarg++;
+            // int colargindx = 0;
+            if(argc-(curarg+4) < 0){
+                cout << "not enough args\n";
                 return 0;
             }
-            for(int coi = i+1; coi < 5+i; coi++){
-                bool hashash = false;
-                if(argv[coi][0] == '#'){
-                    cout << "\nhash detected\n";
-                    hashash = true;
-                }
 
-                //upto extracting pairs of hex and making it RGB's
+            for(int colargindx = curarg; colargindx < curarg+4; colargindx++){
+                cout << argv[colargindx] << endl;
+                // if() //add size checking, then split into 2's, then make 2's into color
             }
         }
+        // if(string(argv[i]) == "--setcol"){
+        //     int colpos = 0;
+        //     if(argc-(i+5) < 0){
+        //         cout << "not enough args";
+        //         return 0;
+        //     }
+        //     for(int coi = i+1; coi < 5+i; coi++){
+        //         int hpindx = 0;
+        //         if(argv[coi][0] == '#'){
+        //             cout << "\nhash detected\n";
+        //             hpindx=1;
+        //         }
+        //         char hexpair[2];
+        //         int rgbbuffer[3];
+        //         for(int rbgi = 0; rbgi<3; rbgi++){
+                    
+        //         }
+        //         //upto extracting pairs of hex and making it RGB's
+        //     }
+        // }
     }
     
     return 0;

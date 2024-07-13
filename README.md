@@ -11,3 +11,5 @@ this thing generates a random background based on a referance image, % of pixels
 
 changing the size of the input image ("./dlaimgs/ref.png") changes how many pixels are simulated. increasing the size does increase the simulation time. you can make your own referance images if you want;
 black isnt a wall and everything else is
+
+[windows instructions](./windows-shit./windows-readme.md)
